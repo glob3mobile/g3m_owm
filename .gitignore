@@ -4,3 +4,8 @@
 *.jar
 *.war
 *.ear
+
+Android/g3m_owm_android/bin/
+Android/g3m_owm_android/gen/
+
+Shared/g3m_owm_shared/bin
