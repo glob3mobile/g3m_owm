@@ -20,7 +20,7 @@
         android:largeHeap="true"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.glob3mobile.g3m_owm.G3MOWMMainActivity"
+            android:name="com.glob3mobile.g3mowm.G3MOWMMainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

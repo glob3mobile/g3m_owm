@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">G3M Weather</string>
+    <string name="action_settings">Configuración</string>
+    <string name="gps_disabled_message">El GPS parece desactivado. La consulta del clima local no estará disponible</string>
+
+</resources>

@@ -1,6 +1,6 @@
 
 
-package com.glob3mobile.g3m_owm;
+package com.glob3mobile.g3mowm;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
@@ -11,6 +11,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
+
+import com.glob3mobile.g3m_owm.R;
 
 
 public class G3MOWMMainActivity
@@ -24,14 +26,14 @@ public class G3MOWMMainActivity
     * {@link android.support.v4.app.FragmentPagerAdapter} derivative, which will keep every loaded fragment in memory. If this
     * becomes too memory intensive, it may be best to switch to a {@link android.support.v4.app.FragmentStatePagerAdapter}.
     */
-   SectionsPagerAdapter                       mSectionsPagerAdapter;
+   SectionsPagerAdapter                      mSectionsPagerAdapter;
 
    /**
     * The {@link ViewPager} that will host the section contents.
     */
-   ViewPager                                  mViewPager;
+   ViewPager                                 mViewPager;
 
-   private com.glob3mobile.g3m_owm.GPSTracker _gpsTracker;
+   private com.glob3mobile.g3mowm.GPSTracker _gpsTracker;
 
 
    @Override
@@ -40,6 +42,13 @@ public class G3MOWMMainActivity
       setContentView(R.layout.activity_main);
 
       _gpsTracker = new GPSTracker(getApplicationContext());
+
+      if (!_gpsTracker.canGetLocation()) {
+         Dialogs.showDialogGPSError(G3MOWMMainActivity.this);
+      }
+      else {
+
+      }
 
       // Set up the action bar.
       final ActionBar actionBar = getActionBar();
@@ -109,8 +118,10 @@ public class G3MOWMMainActivity
             extends
                FragmentPagerAdapter {
 
+
       public SectionsPagerAdapter(final FragmentManager fm) {
          super(fm);
+
       }
 
 
@@ -120,16 +131,16 @@ public class G3MOWMMainActivity
          if (position == 0) {
             return new LocalWeatherFragment();
          }
-         else {
-            //Put the other fragments
-            return new G3MFragment();
-         }
+
+         final Fragment f = new G3MFragment();
+         return f;
+
+
       }
 
 
       @Override
       public int getCount() {
-         // Show 3 total pages.
          return 2;
       }
 
@@ -142,6 +153,7 @@ public class G3MOWMMainActivity
             case 1:
                return "Map";
                //getString(R.string.title_section2).toUpperCase(l);
+
          }
          return null;
       }

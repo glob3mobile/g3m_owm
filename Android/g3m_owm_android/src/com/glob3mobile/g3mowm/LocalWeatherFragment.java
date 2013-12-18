@@ -1,7 +1,9 @@
 /**
  * 
  */
-package com.glob3mobile.g3m_owm;
+package com.glob3mobile.g3mowm;
+
+import com.glob3mobile.g3m_owm.R;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
