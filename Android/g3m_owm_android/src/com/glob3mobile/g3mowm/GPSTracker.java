@@ -152,7 +152,7 @@ public class GPSTracker
 
    @Override
    public void onLocationChanged(final Location arg0) {
-      ILogger.instance().logError("LOCATION CHANGED LON:" + arg0.getLongitude() + ",LAT:" + arg0.getLatitude());
+      //  ILogger.instance().logInfo("LOCATION CHANGED LON:" + arg0.getLongitude() + ",LAT:" + arg0.getLatitude());
    }
 
 

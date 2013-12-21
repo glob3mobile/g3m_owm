@@ -4,5 +4,7 @@
     <string name="app_name">G3M Weather</string>
     <string name="action_settings">Configuración</string>
     <string name="gps_disabled_message">El GPS parece desactivado. La consulta del clima local no estará disponible</string>
-
+    <string name="local_weather">Clima local</string>
+    <string name="map">Mapa</string>
+     <string name="forecast">Previsión</string>
 </resources>

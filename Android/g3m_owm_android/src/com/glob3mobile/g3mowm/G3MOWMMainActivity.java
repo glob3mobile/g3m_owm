@@ -2,38 +2,49 @@
 
 package com.glob3mobile.g3mowm;
 
-import android.app.ActionBar;
-import android.app.FragmentTransaction;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+
+import org.glob3.mobile.specific.G3MBuilder_Android;
+import org.glob3.mobile.specific.G3MWidget_Android;
+
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.view.Menu;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TabHost;
+import android.widget.TextView;
 
 import com.glob3mobile.g3m_owm.R;
+import com.glob3mobile.g3mowm.shared.G3MOWMListener;
+import com.glob3mobile.g3mowm.shared.data.DataRetriever;
+import com.glob3mobile.g3mowm.shared.data.Weather;
+import com.glob3mobile.g3mowm.shared.data.WeatherForecast;
+import com.glob3mobile.g3mowm.shared.data.WeatherForecastParser;
 
 
+@SuppressLint("SetJavaScriptEnabled")
 public class G3MOWMMainActivity
          extends
-            FragmentActivity
+            Activity
          implements
-            ActionBar.TabListener {
+            G3MOWMListener {
 
-   /**
-    * The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the sections. We use a
-    * {@link android.support.v4.app.FragmentPagerAdapter} derivative, which will keep every loaded fragment in memory. If this
-    * becomes too memory intensive, it may be best to switch to a {@link android.support.v4.app.FragmentStatePagerAdapter}.
-    */
-   SectionsPagerAdapter                      mSectionsPagerAdapter;
+   private GPSTracker        _gpsTracker;
+   private G3MWidget_Android _g3mWidget;
 
-   /**
-    * The {@link ViewPager} that will host the section contents.
-    */
-   ViewPager                                 mViewPager;
 
-   private com.glob3mobile.g3mowm.GPSTracker _gpsTracker;
+   public G3MOWMMainActivity() {
+
+   }
 
 
    @Override
@@ -41,123 +52,143 @@ public class G3MOWMMainActivity
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_main);
 
-      _gpsTracker = new GPSTracker(getApplicationContext());
+      final TabHost tabs = (TabHost) findViewById(android.R.id.tabhost);
 
-      if (!_gpsTracker.canGetLocation()) {
-         Dialogs.showDialogGPSError(G3MOWMMainActivity.this);
+      final G3MBuilder_Android builder = new G3MBuilder_Android(this);
+      _g3mWidget = builder.createWidget();
+
+      final RelativeLayout layout = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
+      layout.addView(_g3mWidget);
+
+
+      _gpsTracker = new GPSTracker(G3MOWMMainActivity.this);
+
+
+      if (!_gpsTracker.canGetLocation) {
+         Dialogs.showDialogGPSError(_gpsTracker);
       }
       else {
-
+         DataRetriever.getLocationName(_g3mWidget.getG3MContext(), _gpsTracker.getLatitude(), _gpsTracker.getLongitude(),
+                  G3MOWMMainActivity.this);
       }
 
-      // Set up the action bar.
-      final ActionBar actionBar = getActionBar();
-      actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-      // Create the adapter that will return a fragment for each of the three
-      // primary sections of the app.
-      mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+      tabs.setup();
 
-      // Set up the ViewPager with the sections adapter.
-      mViewPager = (ViewPager) findViewById(R.id.pager);
-      mViewPager.setAdapter(mSectionsPagerAdapter);
 
-      // When swiping between different sections, select the corresponding
-      // tab. We can also use ActionBar.Tab#select() to do this if we have
-      // a reference to the Tab.
-      mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+      TabHost.TabSpec spec = tabs.newTabSpec(getString(R.string.local_weather));
+      spec.setContent(R.id.tab1);
+      spec.setIndicator(getString(R.string.local_weather));
+      tabs.addTab(spec);
+
+      spec = tabs.newTabSpec(getString(R.string.forecast));
+      spec.setContent(R.id.tab2);
+      spec.setIndicator(getString(R.string.forecast));
+      tabs.addTab(spec);
+
+      spec = tabs.newTabSpec(getString(R.string.map));
+      spec.setContent(R.id.tab3);
+      spec.setIndicator(getString(R.string.map));
+      tabs.addTab(spec);
+
+      tabs.setCurrentTab(0);
+
+
+   }
+
+
+   @Override
+   public void onError(final String message) {
+      // TODO Auto-generated method stub
+
+   }
+
+
+   @Override
+   public void onLocation(final String location) {
+
+      runOnUiThread(new Runnable() {
+
          @Override
-         public void onPageSelected(final int position) {
-            actionBar.setSelectedNavigationItem(position);
+         public void run() {
+            final TextView locationTextView = (TextView) findViewById(R.id.location);
+            locationTextView.setText(location);
+            final WebView localWeatherWebView = (WebView) findViewById(R.id.localWeatherWidgets);
+            // localWeatherWebView.loadUrl("http://openweathermap.org/help/widgets.html");
+            final WebSettings webSettings = localWeatherWebView.getSettings();
+            webSettings.setJavaScriptEnabled(true);
+            webSettings.setAllowFileAccessFromFileURLs(true); //Maybe you don't need this rule
+            webSettings.setAllowUniversalAccessFromFileURLs(true);
+
+            //  localWeatherWebView.loadUrl("http://openweathermap.org/help/widgets.html");
+
+
+            localWeatherWebView.loadUrl("file:///android_asset/ww.html?city=" + location);
+
+
+            final WeatherForecastParser wfp = new WeatherForecastParser();
+            wfp.getWeatherForecastList(location, _g3mWidget.getG3MContext(), G3MOWMMainActivity.this);
+            //wfp.getWeatherForecastListNow(location, _g3mWidget.getG3MContext(), G3MOWMMainActivity.this);
+
+
          }
       });
 
-      // For each of the sections in the app, add a tab to the action bar.
-      for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
-         // Create a tab with text corresponding to the page title defined by
-         // the adapter. Also specify this Activity object, which implements
-         // the TabListener interface, as the callback (listener) for when
-         // this tab is selected.
-         actionBar.addTab(actionBar.newTab().setText(mSectionsPagerAdapter.getPageTitle(i)).setTabListener(this));
+
+   }
+
+
+   private Bitmap getBitmapFromAsset(String strName) {
+
+
+      if (strName == null) {
+         strName = "01d.png";
       }
-   }
+      final AssetManager assetManager = getAssets();
 
+      InputStream istr;
+      try {
+         istr = assetManager.open(strName);
 
-   @Override
-   public boolean onCreateOptionsMenu(final Menu menu) {
-      // Inflate the menu; this adds items to the action bar if it is present.
-      getMenuInflater().inflate(R.menu.main, menu);
-      return true;
-   }
-
-
-   @Override
-   public void onTabSelected(final ActionBar.Tab tab,
-                             final FragmentTransaction fragmentTransaction) {
-      // When the given tab is selected, switch to the corresponding page in
-      // the ViewPager.
-      mViewPager.setCurrentItem(tab.getPosition());
-   }
-
-
-   @Override
-   public void onTabUnselected(final ActionBar.Tab tab,
-                               final FragmentTransaction fragmentTransaction) {
-   }
-
-
-   @Override
-   public void onTabReselected(final ActionBar.Tab tab,
-                               final FragmentTransaction fragmentTransaction) {
-   }
-
-   /**
-    * A {@link FragmentPagerAdapter} that returns a fragment corresponding to one of the sections/tabs/pages.
-    */
-   public class SectionsPagerAdapter
-            extends
-               FragmentPagerAdapter {
-
-
-      public SectionsPagerAdapter(final FragmentManager fm) {
-         super(fm);
-
+         final Bitmap bitmap = BitmapFactory.decodeStream(istr);
+         istr.close();
+         return bitmap;
       }
+      catch (final IOException e) {
 
-
-      @Override
-      public Fragment getItem(final int position) {
-
-         if (position == 0) {
-            return new LocalWeatherFragment();
-         }
-
-         final Fragment f = new G3MFragment();
-         return f;
-
-
-      }
-
-
-      @Override
-      public int getCount() {
-         return 2;
-      }
-
-
-      @Override
-      public CharSequence getPageTitle(final int position) {
-         switch (position) {
-            case 0:
-               return "Local Weather";
-            case 1:
-               return "Map";
-               //getString(R.string.title_section2).toUpperCase(l);
-
-         }
+         e.printStackTrace();
          return null;
       }
+
+
    }
 
 
+   @Override
+   public void onWeatherForecast(final WeatherForecast forecast) {
+
+      final ArrayList<Weather> forecastArray = forecast.getForecast();
+
+      runOnUiThread(new Runnable() {
+
+         @Override
+         public void run() {
+            final TextView locationTextTemperature = (TextView) findViewById(R.id.currentTemperature);
+            locationTextTemperature.setText(Math.round(forecastArray.get(0).getTempC()) + " ºC");
+
+
+            final TextView locationTextDescription = (TextView) findViewById(R.id.currentWeatherDescription);
+            locationTextDescription.setText(forecastArray.get(0).getWeatherDescription());
+
+            final ImageView weatherIcon = (ImageView) findViewById(R.id.weatherIcon);
+
+            final Bitmap icon = getBitmapFromAsset(forecastArray.get(0).getIcon());
+            weatherIcon.setImageBitmap(Bitmap.createScaledBitmap(icon, icon.getWidth() * 3, icon.getHeight() * 3, true));
+
+
+         }
+      });
+
+
+   }
 }
