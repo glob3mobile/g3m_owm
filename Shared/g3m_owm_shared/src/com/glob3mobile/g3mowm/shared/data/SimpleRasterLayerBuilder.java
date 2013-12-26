@@ -44,15 +44,15 @@ public class SimpleRasterLayerBuilder
       mboxAerialLayer.setEnable(false);
       layerSet.addLayer(mboxAerialLayer);
 
-      final MapBoxLayer mboxTerrainLayer = new MapBoxLayer("examples.map-qogxobv1", TimeInterval.fromDays(30), true, 2);
+      final MapBoxLayer mboxTerrainLayer = new MapBoxLayer("examples.map-9ijuk24y", TimeInterval.fromDays(30), true, 2);
       mboxTerrainLayer.setTitle("Map Box Terrain");
       mboxTerrainLayer.setEnable(false);
       layerSet.addLayer(mboxTerrainLayer);
 
-      final MapBoxLayer mboxOSMLayer = new MapBoxLayer("examples.map-cnkhv76j", TimeInterval.fromDays(30), true, 2);
-      mboxOSMLayer.setTitle("Map Box OSM");
-      mboxOSMLayer.setEnable(true);
-      layerSet.addLayer(mboxOSMLayer);
+      //      final MapBoxLayer mboxOSMLayer = new MapBoxLayer("examples.map-cnkhv76j", TimeInterval.fromDays(30), true, 2);
+      //      mboxOSMLayer.setTitle("Map Box OSM");
+      //      mboxOSMLayer.setEnable(true);
+      //      layerSet.addLayer(mboxOSMLayer);
 
       final WMSLayer blueMarble = new WMSLayer("bmng200405", new URL("http://www.nasa.network.com/wms?", false),
                WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/jpeg", "EPSG:4326", "", false, new LevelTileCondition(0,
@@ -107,14 +107,14 @@ public class SimpleRasterLayerBuilder
 
       final URLTemplateLayer precipitationOWM = URLTemplateLayer.newMercator(
                "http://undefined.tile.openweathermap.org/map/precipitation/{level}/{x}/{y}.png", Sector.fullSphere(), true, 1,
-               18, TimeInterval.fromDays(30), true, new LevelTileCondition(1, 18));
+               18, TimeInterval.fromDays(30), true, new LevelTileCondition(1, 18), 0.5f);
       precipitationOWM.setTitle("Precipitation");
       precipitationOWM.setEnable(false);
       layerSet.addLayer(precipitationOWM);
 
       final URLTemplateLayer cloudsOWM = URLTemplateLayer.newMercator(
                "http://undefined.tile.openweathermap.org/map/clouds/{level}/{x}/{y}.png", Sector.fullSphere(), true, 1, 18,
-               TimeInterval.fromDays(30), true, new LevelTileCondition(1, 18));
+               TimeInterval.fromDays(30), true, new LevelTileCondition(1, 18), 0.5f);
       cloudsOWM.setTitle("Clouds");
       cloudsOWM.setEnable(false);
       layerSet.addLayer(cloudsOWM);
@@ -122,7 +122,7 @@ public class SimpleRasterLayerBuilder
 
       final URLTemplateLayer pressureOWM = URLTemplateLayer.newMercator(
                "http://undefined.tile.openweathermap.org/map/pressure/{level}/{x}/{y}.png", Sector.fullSphere(), true, 1, 18,
-               TimeInterval.fromDays(30), true, new LevelTileCondition(1, 18));
+               TimeInterval.fromDays(30), true, new LevelTileCondition(1, 18), 0.5f);
       pressureOWM.setTitle("Pressure");
       pressureOWM.setEnable(false);
       layerSet.addLayer(pressureOWM);
@@ -138,15 +138,15 @@ public class SimpleRasterLayerBuilder
 
       final URLTemplateLayer windOWM = URLTemplateLayer.newMercator(
                "http://undefined.tile.openweathermap.org/map/wind/{level}/{x}/{y}.png", Sector.fullSphere(), true, 1, 18,
-               TimeInterval.fromDays(30), true, new LevelTileCondition(1, 18));
+               TimeInterval.fromDays(30), true, new LevelTileCondition(1, 18), 0.5f);
       windOWM.setTitle("Wind");
       windOWM.setEnable(false);
       layerSet.addLayer(windOWM);
 
 
       final URLTemplateLayer temperatureOWM = URLTemplateLayer.newMercator(
-               "http://undefined.tile.openweathermap.org/map/temperature/{level}/{x}/{y}.png", Sector.fullSphere(), true, 1, 18,
-               TimeInterval.fromDays(30), true, new LevelTileCondition(1, 18));
+               "http://undefined.tile.openweathermap.org/map/temp/{level}/{x}/{y}.png", Sector.fullSphere(), true, 1, 18,
+               TimeInterval.fromDays(30), true, new LevelTileCondition(1, 18), 0.5f);
       temperatureOWM.setTitle("Temperature");
       temperatureOWM.setEnable(false);
       layerSet.addLayer(temperatureOWM);

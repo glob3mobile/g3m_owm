@@ -91,7 +91,6 @@ public class G3MOWMBuilder {
 
    private static void configureLayers() {
       _layerset = SimpleRasterLayerBuilder.createLayerset();
-
       _layerset.getLayerByTitle("Bing Aerial").setEnable(true);
       _builder.getPlanetRendererBuilder().setLayerSet(_layerset);
    }
