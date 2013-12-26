@@ -26,6 +26,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" >
 
+                    <!--  TAB 1 - CURRENT WEATHER -->
+                    
                     <RelativeLayout
                         android:id="@+id/tab1"
                         android:layout_width="match_parent"
@@ -89,8 +91,9 @@
 			     android:layout_width="wrap_content"
 			     android:layout_height="wrap_content"
 			     android:layout_gravity="right"
+			     android:contentDescription="@string/app_name"
                             android:gravity="right"
-			     android:src="@drawable/ic_launcher" />
+			   />
 			 
 			    </LinearLayout>
                                   
@@ -104,34 +107,92 @@
                         
                         </RelativeLayout>
                         
+                    <!-- FORECAST -->
+                    
                       <RelativeLayout
                         android:id="@+id/tab2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                             android:background="@android:color/white"
+                          android:background="@android:color/white"
                         >
 
+   
+
                           <TextView
-                              android:id="@+id/textView1"
+                              android:id="@+id/locationForecast"
                               android:layout_width="wrap_content"
                               android:layout_height="wrap_content"
-                              android:text="forecast"
-                              android:textAppearance="?android:attr/textAppearanceLarge" />
+                              android:layout_marginLeft="34dp"
+                              android:layout_marginTop="20dp"
+                              android:layout_marginBottom="20dp"
+                              android:background="@android:color/white"
+                              android:textSize="35sp" />
+
                           
-                        </RelativeLayout>
+                        <WebView
+                            android:id="@+id/forecastWeatherWidgets"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/locationForecast" />
+                          
+                         
+                       <HorizontalScrollView
+                              android:id="@+id/weatherForecastScrollView"
+                              android:layout_below = "@+id/forecastWeatherWidgets"
+                              android:layout_width="wrap_content"
+                              android:layout_height="wrap_content" 
+                                 android:layout_marginTop="20dp"
+                                android:background="@android:color/white"
+                              >
+			  
+                        <LinearLayout
+                           android:id="@+id/weatherForecastScrollViewLayout"
+                           android:layout_width="wrap_content"
+                           android:layout_height="wrap_content" 
+                           android:orientation="horizontal"
+                             android:background="@android:color/white"
+                           >
+
+
+
+                       </LinearLayout>
+                           
+                        
+			   </HorizontalScrollView>
+
+                      
+                          
+</RelativeLayout>
 
                     <RelativeLayout
                         android:id="@+id/tab3"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" 
-                             android:background="@android:color/white"
                          >             
 
                            <RelativeLayout
         android:id="@+id/g3mWidgetHolder"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-         >
+        android:layout_height="fill_parent"    >
+        
+        
+                    <Spinner
+                android:id="@+id/spinnerBaseLayers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+            />
+        
+                <Spinner
+                android:id="@+id/spinnerWeatherLayers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@+id/spinnerBaseLayers" />
+        
+     
                     </RelativeLayout>
     </RelativeLayout>
                 </FrameLayout>

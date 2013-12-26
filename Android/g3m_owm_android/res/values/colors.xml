@@ -1,0 +1,16 @@
+
+    <resources>
+        <color name="navigation_bg">#363636</color>
+        <color name="navigation_bg_disabled">#eeeeee</color>
+        <color name="g3mGreenLight">#a4c035</color>
+        <color name="g3mGreenDark">#7a8e27</color>
+        <color name="yellowIberia">#eaaf00</color>
+        <color name="gal_bg_white">#fcfcfc</color>
+        <color name="gal_text_grey">#6e6e6e</color>
+         <color name="gal_text_light_grey">#a3a3a3</color>
+         <color name="gal_dropdown">#009edb</color>
+         <color name="blue_lh">#1b215f</color>
+           <color name="background_holo_dark">#ff000000</color>
+    <color name="background_holo_light">#fff3f3f3</color>
+    <color name="transparent_background">#80000000</color>
+    </resources>

@@ -25,7 +25,11 @@ import org.glob3.mobile.generated.TimeInterval;
 import org.glob3.mobile.generated.URL;
 import org.glob3.mobile.specific.JSONParser_Android;
 
+import android.graphics.Paint;
+import android.graphics.Paint.Style;
+import android.graphics.drawable.ShapeDrawable;
 import android.util.Log;
+import android.view.View;
 
 
 public class Utils {
@@ -263,5 +267,21 @@ public class Utils {
 
 
       return places;
+   }
+
+
+   public static void setBorderToLayout(final View view,
+                                        final int color,
+                                        final int width) {
+      final ShapeDrawable rectShapeDrawable = new ShapeDrawable(); // pre defined class
+
+      // get paint
+      final Paint paint = rectShapeDrawable.getPaint();
+
+      // set border color, stroke and stroke width
+      paint.setColor(color);
+      paint.setStyle(Style.STROKE);
+      paint.setStrokeWidth(width); // you can change the value of 5
+      view.setBackground(rectShapeDrawable);
    }
 }

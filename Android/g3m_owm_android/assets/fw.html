@@ -1,3 +1,4 @@
+
 <html>
 <head>
 <title>Open Weather Map weather Chart</title>
@@ -17,7 +18,7 @@
 <link href="http://openweathermap.org/stylesheets/bootstrap.min.css" rel="stylesheet">
 <link href="http://openweathermap.org/stylesheets/2.0.4/bootstrap-responsive.min.css" rel="stylesheet">
 
-<script src="http://openweathermap.org/js/charts.js"></script>
+<script src="file:///android_asset/charts.js"></script>
 
 </head>
 
@@ -26,11 +27,13 @@
 
 
 <div class="row">
-
- <div id="whatever">
- <div id="chart-polar" style="width:  50%; height: 250px; margin: 0 auto"  ></div>
- <div id="chart-polar2" style="width: 50% ; height: 250px; margin: 0 auto"  ></div>
- </div>
+    <div class="span4">
+    </div>
+    <div class="span8">
+	<div id="chart-simple" style="width: 100%; height: 200px; margin: 0 auto" ></div>
+    </div>
+    <div class="row">
+</div>
 </div>
 
 </body>
@@ -45,7 +48,7 @@ function getURLParameter(name) {
 }
 
 jQuery(document).ready(function() {
-	// Получаем начало вчерашнего дня
+	
 	var curd = new Date();
 	var d = new Date(curd.getFullYear(), curd.getMonth(), curd.getDate());
 	var s = Math.round(( d.getTime() ) /1000) - 3600*24;
@@ -59,8 +62,10 @@ function getData(JSONtext)
 {
 	JSONobject = ParseJson(JSONtext);
 	data = JSONobject.list;
-	 showPolar('chart-polar',data);
-	  chartDoublePress('chart-polar2',data);
+	 showSimpleChart('chart-simple', data);
+	 showTempMinMax('chart-simple', data);
+	 showIconsChart('chart-simple', data);	
+
 }
 
 function  errorHandler(e)
@@ -74,7 +79,7 @@ function ParseJson(JSONtext)
 	try{
 		JSONobject = JSON.parse(JSONtext); 
 	}catch(e){
-		
+		ShowAlertMess('Ошибка JSON');
 		return;
 	}
 

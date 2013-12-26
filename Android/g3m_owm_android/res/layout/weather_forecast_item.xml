@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingLeft="20dp" 
+    android:paddingRight="20dp" 
+    >
+    
+    
+    
+    
+    <TextView
+        android:id="@+id/dayOfTheWeek"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+         android:textSize="30sp"
+        />
+    <TextView
+        android:id="@+id/dayOfTheMonth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/dayOfTheWeek"
+       android:textSize="30sp"/>
+    
+        <TextView
+        android:id="@+id/hour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+       android:layout_below="@+id/dayOfTheWeek"
+       android:textSize="20sp"/>
+    
+        <TextView
+        android:id="@+id/tempMax"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/hour"
+         android:textSize="20sp"
+        />
+    <TextView
+        android:id="@+id/tempMin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+         android:layout_below="@+id/hour"
+        android:layout_toRightOf="@+id/tempMax"
+       android:textSize="20sp"/>
+    
+        <TextView
+        android:id="@+id/descriptionForecast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+         android:layout_below="@+id/tempMin"
+       android:textSize="20sp"/>
+        
+        
+            
+        <TextView
+        android:id="@+id/windForecast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+         android:layout_below="@+id/descriptionForecast"
+       android:textSize="20sp"/>
+    
+        
+            
+        <TextView
+        android:id="@+id/windDirection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/descriptionForecast"
+         android:layout_toRightOf="@+id/windForecast"
+         android:textSize="20sp"/>
+    
+    			 <ImageView
+			     android:id="@+id/weatherIconForecast"
+			     android:layout_marginRight="20dp"
+			     android:layout_width="wrap_content"
+			     android:layout_height="wrap_content"
+			     android:layout_below="@+id/windDirection"
+			     android:layout_gravity="center"
+			     android:contentDescription="@string/app_name"
+                             android:gravity="center"
+			   />
+
+    
+</RelativeLayout>
