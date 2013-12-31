@@ -107,14 +107,14 @@ public class SimpleRasterLayerBuilder
 
       final URLTemplateLayer precipitationOWM = URLTemplateLayer.newMercator(
                "http://undefined.tile.openweathermap.org/map/precipitation/{level}/{x}/{y}.png", Sector.fullSphere(), true, 1,
-               18, TimeInterval.fromDays(30), true, new LevelTileCondition(1, 18), 0.5f);
+               18, TimeInterval.zero(), true, new LevelTileCondition(1, 18), 0.5f);
       precipitationOWM.setTitle("Precipitation");
       precipitationOWM.setEnable(false);
       layerSet.addLayer(precipitationOWM);
 
       final URLTemplateLayer cloudsOWM = URLTemplateLayer.newMercator(
                "http://undefined.tile.openweathermap.org/map/clouds/{level}/{x}/{y}.png", Sector.fullSphere(), true, 1, 18,
-               TimeInterval.fromDays(30), true, new LevelTileCondition(1, 18), 0.5f);
+               TimeInterval.zero(), true, new LevelTileCondition(1, 18), 0.8f);
       cloudsOWM.setTitle("Clouds");
       cloudsOWM.setEnable(false);
       layerSet.addLayer(cloudsOWM);
@@ -122,7 +122,7 @@ public class SimpleRasterLayerBuilder
 
       final URLTemplateLayer pressureOWM = URLTemplateLayer.newMercator(
                "http://undefined.tile.openweathermap.org/map/pressure/{level}/{x}/{y}.png", Sector.fullSphere(), true, 1, 18,
-               TimeInterval.fromDays(30), true, new LevelTileCondition(1, 18), 0.5f);
+               TimeInterval.zero(), true, new LevelTileCondition(1, 18), 0.5f);
       pressureOWM.setTitle("Pressure");
       pressureOWM.setEnable(false);
       layerSet.addLayer(pressureOWM);
@@ -130,7 +130,7 @@ public class SimpleRasterLayerBuilder
 
       final URLTemplateLayer pressureContourOWM = URLTemplateLayer.newMercator(
                "http://undefined.tile.openweathermap.org/map/pressure_cntr/{level}/{x}/{y}.png", Sector.fullSphere(), true, 1,
-               18, TimeInterval.fromDays(30), true, new LevelTileCondition(1, 18));
+               18, TimeInterval.zero(), true, new LevelTileCondition(1, 18));
       pressureContourOWM.setTitle("Pressure Contour");
       pressureContourOWM.setEnable(false);
       layerSet.addLayer(pressureContourOWM);
@@ -138,7 +138,7 @@ public class SimpleRasterLayerBuilder
 
       final URLTemplateLayer windOWM = URLTemplateLayer.newMercator(
                "http://undefined.tile.openweathermap.org/map/wind/{level}/{x}/{y}.png", Sector.fullSphere(), true, 1, 18,
-               TimeInterval.fromDays(30), true, new LevelTileCondition(1, 18), 0.5f);
+               TimeInterval.zero(), true, new LevelTileCondition(1, 18), 0.5f);
       windOWM.setTitle("Wind");
       windOWM.setEnable(false);
       layerSet.addLayer(windOWM);
@@ -154,7 +154,7 @@ public class SimpleRasterLayerBuilder
 
       final URLTemplateLayer snowOWM = URLTemplateLayer.newMercator(
                "http://undefined.tile.openweathermap.org/map/snow/{level}/{x}/{y}.png", Sector.fullSphere(), true, 1, 18,
-               TimeInterval.fromDays(30), true, new LevelTileCondition(1, 18));
+               TimeInterval.zero(), true, new LevelTileCondition(1, 18));
       snowOWM.setTitle("Snow");
       snowOWM.setEnable(false);
       layerSet.addLayer(snowOWM);

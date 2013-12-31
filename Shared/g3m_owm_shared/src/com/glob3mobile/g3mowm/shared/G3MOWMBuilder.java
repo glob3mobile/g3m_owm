@@ -6,9 +6,9 @@ import java.util.ArrayList;
 
 import org.glob3.mobile.generated.Color;
 import org.glob3.mobile.generated.IG3MBuilder;
-import org.glob3.mobile.generated.ILogger;
 import org.glob3.mobile.generated.LayerSet;
 import org.glob3.mobile.generated.MarksRenderer;
+import org.glob3.mobile.generated.Quality;
 
 import com.glob3mobile.g3mowm.shared.data.SimpleRasterLayerBuilder;
 
@@ -39,6 +39,7 @@ public class G3MOWMBuilder {
       _platform = platform;
 
       _builder.setBackgroundColor(Color.fromRGBA255(175, 221, 233, 255));
+      _builder.getPlanetRendererBuilder().setQuality(Quality.QUALITY_HIGH);
       _weatherMarksRenderer = new MarksRenderer(false);
       _builder.addRenderer(_weatherMarksRenderer);
       configureLayers();
@@ -71,14 +72,17 @@ public class G3MOWMBuilder {
 
    public static void disableAllWeatherLayers() {
       for (final String layerTitle : _weatherLayers) {
-         _layerset.getLayerByTitle(layerTitle).setEnable(false);
+         if (!layerTitle.equals("None")) {
+            _layerset.getLayerByTitle(layerTitle).setEnable(false);
+         }
       }
    }
 
 
    public static ArrayList<String> getWeatherLayerList() {
       _weatherLayers = new ArrayList<String>();
-      //     _weatherLayers.add("Weather");
+      _weatherLayers.add("None");
+      _weatherLayers.add("Clouds");
       _weatherLayers.add("Precipitation");
       _weatherLayers.add("Pressure");
       _weatherLayers.add("Pressure Contour");
@@ -103,11 +107,15 @@ public class G3MOWMBuilder {
 
 
    public static void enableLayer(final String text) {
+      if (text.equals("Pressure Contour")) {
+         _layerset.getLayerByTitle(text).setEnable(true);
+         _layerset.getLayerByTitle("Pressure").setEnable(true);
+      }
+      else
 
-      ILogger.instance().logInfo("Enable Layer:" + text);
-      _layerset.getLayerByTitle(text).setEnable(true);
+      if (!text.equals("None")) {
+         _layerset.getLayerByTitle(text).setEnable(true);
+      }
 
    }
-
-
 }

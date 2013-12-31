@@ -7,5 +7,10 @@
      <string name="local_weather">Local Weather</string>
     <string name="map">Map</string>
        <string name="forecast">Forecast</string>
+         <string name="enableIcons">Put Icons</string>
+           <string name="disableIcons">Quit Icons</string>
+            <string name="refreshItem">Refresh</string>
+            <string name="networkError">The Internet connection is not avalaible.We can\'t retrieve the weather data. The app wil shut down now</string>
+           
 
 </resources>

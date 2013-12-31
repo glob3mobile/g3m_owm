@@ -8,28 +8,39 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.Geodetic3D;
+import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.specific.G3MBuilder_Android;
 import org.glob3.mobile.specific.G3MWidget_Android;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.glob3mobile.g3m_owm.R;
 import com.glob3mobile.g3mowm.shared.G3MOWMBuilder;
@@ -51,6 +62,7 @@ public class G3MOWMMainActivity
    private GPSTracker        _gpsTracker;
    private G3MWidget_Android _g3mWidget;
    private String            _location;
+   private TabHost           _tabs;
 
 
    public G3MOWMMainActivity() {
@@ -64,7 +76,7 @@ public class G3MOWMMainActivity
       setContentView(R.layout.activity_main);
 
 
-      final TabHost tabs = (TabHost) findViewById(android.R.id.tabhost);
+      _tabs = (TabHost) findViewById(android.R.id.tabhost);
 
       final RelativeLayout layout = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
       final G3MBuilder_Android builder = new G3MBuilder_Android(this);
@@ -95,8 +107,6 @@ public class G3MOWMMainActivity
 
          @Override
          public void onNothingSelected(final AdapterView<?> arg0) {
-
-
          }
       });
 
@@ -120,8 +130,6 @@ public class G3MOWMMainActivity
 
          @Override
          public void onNothingSelected(final AdapterView<?> arg0) {
-            // TODO Auto-generated method stub
-
          }
       });
 
@@ -133,30 +141,69 @@ public class G3MOWMMainActivity
          Dialogs.showDialogGPSError(_gpsTracker);
       }
       else {
-         DataRetriever.getLocationName(_g3mWidget.getG3MContext(), _gpsTracker.getLatitude(), _gpsTracker.getLongitude(),
+
+         if (!isOnline()) {
+            Dialogs.showNetworkError(G3MOWMMainActivity.this);
+         }
+
+
+         DataRetriever.getWeatherForLocation(_g3mWidget.getG3MContext(), _gpsTracker.getLatitude(), _gpsTracker.getLongitude(),
                   G3MOWMMainActivity.this);
       }
 
+      final ToggleButton weatherIcons = (ToggleButton) layout.findViewById(R.id.weatherIcons);
+      weatherIcons.bringToFront();
+      weatherIcons.setOnClickListener(new OnClickListener() {
 
-      tabs.setup();
+         @Override
+         public void onClick(final View arg0) {
+            final MarksRenderer mr = G3MOWMBuilder.getWeatherMarkerLayer();
+            if (mr.isEnable()) {
+               mr.setEnable(false);
+            }
+            else {
+               mr.setEnable(true);
+            }
+
+         }
+      });
 
 
-      TabHost.TabSpec spec = tabs.newTabSpec(getString(R.string.local_weather));
+      final ImageButton goLocalWeather = (ImageButton) layout.findViewById(R.id.locationButton);
+      goLocalWeather.setBackgroundColor(getResources().getColor(R.color.transparent_background));
+      goLocalWeather.bringToFront();
+
+      goLocalWeather.setOnClickListener(new OnClickListener() {
+
+         @Override
+         public void onClick(final View v) {
+            DataRetriever.getLocalWeather(_g3mWidget.getG3MContext(), _gpsTracker.getLatitude(), _gpsTracker.getLongitude(),
+                     G3MOWMBuilder.getWeatherMarkerLayer());
+            _g3mWidget.setAnimatedCameraPosition(new Geodetic3D(Angle.fromDegrees(_gpsTracker.getLatitude()),
+                     Angle.fromDegrees(_gpsTracker.getLongitude()), 50000));
+         }
+      });
+
+
+      _tabs.setup();
+
+
+      TabHost.TabSpec spec = _tabs.newTabSpec(getString(R.string.local_weather));
       spec.setContent(R.id.tab1);
       spec.setIndicator(getString(R.string.local_weather));
-      tabs.addTab(spec);
+      _tabs.addTab(spec);
 
-      spec = tabs.newTabSpec(getString(R.string.forecast));
+      spec = _tabs.newTabSpec(getString(R.string.forecast));
       spec.setContent(R.id.tab2);
       spec.setIndicator(getString(R.string.forecast));
-      tabs.addTab(spec);
+      _tabs.addTab(spec);
 
-      spec = tabs.newTabSpec(getString(R.string.map));
+      spec = _tabs.newTabSpec(getString(R.string.map));
       spec.setContent(R.id.tab3);
       spec.setIndicator(getString(R.string.map));
-      tabs.addTab(spec);
+      _tabs.addTab(spec);
 
-      tabs.setCurrentTab(0);
+      _tabs.setCurrentTab(0);
 
 
    }
@@ -232,7 +279,48 @@ public class G3MOWMMainActivity
 
 
    @Override
+   public boolean onCreateOptionsMenu(final Menu menu) {
+
+      getMenuInflater().inflate(R.menu.main, menu);
+
+      final MenuItem settings = menu.findItem(R.id.action_settings);
+      settings.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+         @Override
+         public boolean onMenuItemClick(final MenuItem item) {
+            return false;
+         }
+      });
+
+      final MenuItem refresh = menu.findItem(R.id.update);
+      refresh.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+         @Override
+         public boolean onMenuItemClick(final MenuItem item) {
+
+            _tabs.setVisibility(View.INVISIBLE);
+            final RelativeLayout loading = (RelativeLayout) findViewById(R.id.loading);
+            loading.setVisibility(View.VISIBLE);
+            loading.bringToFront();
+            onLocation(_location);
+            return false;
+         }
+      });
+
+
+      return true;
+   }
+
+
+   public boolean isOnline() {
+      final ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+      return (cm.getActiveNetworkInfo() != null) && cm.getActiveNetworkInfo().isConnectedOrConnecting();
+   }
+
+
+   @Override
    public void onWeatherForecast(final WeatherForecast forecastCollection) {
+
 
       final ArrayList<Weather> forecastArray = forecastCollection.getForecast();
 
@@ -303,6 +391,12 @@ public class G3MOWMMainActivity
 
                forecastViewLayout.addView(forecastView);
             }
+
+
+            //Weather donwloaded:
+            final RelativeLayout loading = (RelativeLayout) findViewById(R.id.loading);
+            loading.setVisibility(View.INVISIBLE);
+            _tabs.setVisibility(View.VISIBLE);
 
 
          }

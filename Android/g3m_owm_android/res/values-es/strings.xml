@@ -7,4 +7,8 @@
     <string name="local_weather">Clima local</string>
     <string name="map">Mapa</string>
      <string name="forecast">Previsión</string>
+     <string name="enableIcons">Ver iconos</string>
+     <string name="disableIcons">Quitar Iconos</string>
+        <string name="refreshItem">Refresh</string>
+         <string name="networkError">No hay conexión a Internet. Los datos de la previsión meteorológica no pueden ser descargados. La aplicación se cerrará</string>
 </resources>
