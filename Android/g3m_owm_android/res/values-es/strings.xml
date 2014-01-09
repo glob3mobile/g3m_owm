@@ -9,6 +9,17 @@
      <string name="forecast">Previsión</string>
      <string name="enableIcons">Ver iconos</string>
      <string name="disableIcons">Quitar Iconos</string>
-        <string name="refreshItem">Refresh</string>
-         <string name="networkError">No hay conexión a Internet. Los datos de la previsión meteorológica no pueden ser descargados. La aplicación se cerrará</string>
-</resources>
+     <string name="refreshItem">Refresh</string>
+     <string name="networkError">No hay conexión a Internet. Los datos de la previsión meteorológica no pueden ser descargados. La aplicación se cerrará</string>
+     <string name="unit_system">Sistema de unidades</string>
+     <string name="international">Internacional</string>
+     <string name="imperial">Imperial</string>
+     <string name="select_location">Selecciona el lugar de donde quieres conocer la predicción meteorológica</string>
+     <string name="search_location">Buscar lugar &#8230;</string>
+     <string name="go">ok</string>
+     <string name="cancel">Cancelar</string>   
+     <string-array name="unit_system_array">
+        <item >Internacional</item>
+        <item>Imperial</item>
+     </string-array>                      
+ </resources>

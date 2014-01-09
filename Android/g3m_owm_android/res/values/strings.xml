@@ -4,13 +4,26 @@
     <string name="app_name">G3M Weather</string>
     <string name="action_settings">Settings</string>
     <string name="gps_disabled_message">Your GPS is disabled. Local time will not be avalaible</string>
-     <string name="local_weather">Local Weather</string>
+    <string name="local_weather">Local Weather</string>
     <string name="map">Map</string>
-       <string name="forecast">Forecast</string>
-         <string name="enableIcons">Put Icons</string>
-           <string name="disableIcons">Quit Icons</string>
-            <string name="refreshItem">Refresh</string>
-            <string name="networkError">The Internet connection is not avalaible.We can\'t retrieve the weather data. The app wil shut down now</string>
-           
+    <string name="forecast">Forecast</string>
+    <string name="enableIcons">Put Icons</string>
+    <string name="disableIcons">Quit Icons</string>
+    <string name="refreshItem">Refresh</string>
+    <string name="networkError">The Internet connection is not avalaible.We can\'t retrieve the weather data. The app wil shut down now</string>
+    <string name="unit_system">Unit System</string>
+    <string name="international">International</string>
+    <string name="imperial">Imperial</string>
+    <string name="select_location">Select the location you want to know the weather forecast</string>
+    <string name="search_location">Search new location &#8230;</string>
+   <string name="go">go</string>
+   <string name="cancel">Cancel</string>   
+    <string-array name="unit_system_array">
+        <item>International</item>
+        <item>Imperial</item>
+    </string-array>
+
+    <string name="title_activity_search_location">SearchLocationActivity</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

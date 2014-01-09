@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+ 
+    <PreferenceCategory android:title="@string/unit_system" >
+    
+</PreferenceCategory>
+        
+       <ListPreference
+            android:key="@string/unit_system"
+            android:entries="@array/unit_system_array"           
+            android:entryValues="@array/unit_system_array"
+            android:defaultValue="@string/international"
+            android:title="@string/unit_system" />
+</PreferenceScreen>

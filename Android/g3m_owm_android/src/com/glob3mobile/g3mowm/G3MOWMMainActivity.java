@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import org.glob3.mobile.generated.Angle;
+import org.glob3.mobile.generated.G3MContext;
 import org.glob3.mobile.generated.Geodetic3D;
 import org.glob3.mobile.generated.MarksRenderer;
 import org.glob3.mobile.specific.G3MBuilder_Android;
@@ -17,11 +18,14 @@ import org.glob3.mobile.specific.G3MWidget_Android;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,6 +36,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -63,6 +68,9 @@ public class G3MOWMMainActivity
    private G3MWidget_Android _g3mWidget;
    private String            _location;
    private TabHost           _tabs;
+   private SharedPreferences _sharedPrefs;
+   private String            _unitSystem;
+   private G3MContext        _g3mContext;
 
 
    public G3MOWMMainActivity() {
@@ -76,6 +84,11 @@ public class G3MOWMMainActivity
       setContentView(R.layout.activity_main);
 
 
+      PreferenceManager.setDefaultValues(this, R.xml.settings, true);
+      _sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+      _unitSystem = _sharedPrefs.getString(getResources().getString(R.string.unit_system), "International");
+
+
       _tabs = (TabHost) findViewById(android.R.id.tabhost);
 
       final RelativeLayout layout = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
@@ -83,15 +96,14 @@ public class G3MOWMMainActivity
       G3MOWMBuilder.buildG3MOWM(builder, this, G3MOWMBuilder.Platform.ANDROID);
 
       _g3mWidget = builder.createWidget();
+      _g3mContext = _g3mWidget.getG3MContext();
       layout.addView(_g3mWidget);
 
       DataRetriever.getWorldWeather(_g3mWidget.getG3MContext(), G3MOWMBuilder.getWeatherMarkerLayer());
 
-
       final Spinner spinnerLayers = (Spinner) layout.findViewById(R.id.spinnerBaseLayers);
       spinnerLayers.setAdapter(new DataSourceAdapter(G3MOWMMainActivity.this, G3MOWMBuilder.getBaseLayerList()));
       spinnerLayers.bringToFront();
-
       spinnerLayers.setOnItemSelectedListener(new OnItemSelectedListener() {
 
          @Override
@@ -114,8 +126,6 @@ public class G3MOWMMainActivity
       final Spinner spinnerWeatherLayers = (Spinner) layout.findViewById(R.id.spinnerWeatherLayers);
       spinnerWeatherLayers.setAdapter(new DataSourceAdapter(G3MOWMMainActivity.this, G3MOWMBuilder.getWeatherLayerList()));
       spinnerWeatherLayers.bringToFront();
-
-
       spinnerWeatherLayers.setOnItemSelectedListener(new OnItemSelectedListener() {
 
          @Override
@@ -225,10 +235,30 @@ public class G3MOWMMainActivity
          public void run() {
 
 
-            // Local Current Weather
+            final Button selectLocationButton = (Button) findViewById(R.id.selectLocation);
+
+            selectLocationButton.setOnClickListener(new OnClickListener() {
+
+               @Override
+               public void onClick(final View v) {
+                  Dialogs.showLocationDialog(G3MOWMMainActivity.this);
+               }
+            });
+
+            final Button searchLocationButton = (Button) findViewById(R.id.addNewLocation);
+
+            searchLocationButton.setOnClickListener(new OnClickListener() {
+
+               @Override
+               public void onClick(final View v) {
+                  Dialogs.showSearchLocationDialog(G3MOWMMainActivity.this, _g3mContext);
+               }
+            });
+
 
             final TextView locationTextView = (TextView) findViewById(R.id.location);
             locationTextView.setText(location);
+
             final WebView localWeatherWebView = (WebView) findViewById(R.id.localWeatherWidgets);
             final WebSettings webSettings = localWeatherWebView.getSettings();
             webSettings.setJavaScriptEnabled(true);
@@ -288,6 +318,8 @@ public class G3MOWMMainActivity
 
          @Override
          public boolean onMenuItemClick(final MenuItem item) {
+            final Intent intent = new Intent(G3MOWMMainActivity.this, SettingsActivity.class);
+            startActivity(intent);
             return false;
          }
       });
@@ -329,7 +361,14 @@ public class G3MOWMMainActivity
          @Override
          public void run() {
             final TextView locationTextTemperature = (TextView) findViewById(R.id.currentTemperature);
-            locationTextTemperature.setText(Math.round(forecastArray.get(0).getTempC()) + " ºC");
+
+
+            if (_unitSystem.equals(getResources().getString(R.string.international))) {
+               locationTextTemperature.setText(Math.round(forecastArray.get(0).getTempC()) + " ºC");
+            }
+            else {
+               locationTextTemperature.setText(Math.round(forecastArray.get(0).getTempF()) + " ºF");
+            }
 
 
             final TextView locationTextDescription = (TextView) findViewById(R.id.currentWeatherDescription);
@@ -371,9 +410,24 @@ public class G3MOWMMainActivity
 
 
                final TextView tempMaxView = (TextView) forecastView.findViewById(R.id.tempMax);
-               tempMaxView.setText(Math.round(forecast.getTempMaxC()) + "ºC");
+
+
+               if (_unitSystem.equals(getResources().getString(R.string.international))) {
+                  tempMaxView.setText(Math.round(forecast.getTempMaxC()) + "ºC");
+               }
+               else {
+                  tempMaxView.setText(Math.round(forecast.getTempMaxF()) + "ºF");
+               }
+
+
                final TextView tempMinView = (TextView) forecastView.findViewById(R.id.tempMin);
-               tempMinView.setText("   /  " + Math.round(forecast.getTempMinC()) + "ºC");
+
+               if (_unitSystem.equals(getResources().getString(R.string.international))) {
+                  tempMinView.setText("   /  " + Math.round(forecast.getTempMinC()) + "ºC");
+               }
+               else {
+                  tempMinView.setText("   /  " + Math.round(forecast.getTempMinF()) + "ºF");
+               }
 
                final TextView descriptionForecastView = (TextView) forecastView.findViewById(R.id.descriptionForecast);
                descriptionForecastView.setText(forecast.getWeatherDescription());

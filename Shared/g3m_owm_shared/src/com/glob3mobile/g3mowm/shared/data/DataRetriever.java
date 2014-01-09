@@ -2,6 +2,8 @@
 
 package com.glob3mobile.g3mowm.shared.data;
 
+import java.util.ArrayList;
+
 import org.glob3.mobile.generated.AltitudeMode;
 import org.glob3.mobile.generated.Angle;
 import org.glob3.mobile.generated.G3MContext;
@@ -29,9 +31,9 @@ public class DataRetriever {
 
 
    public static void getWeatherForLocation(final G3MContext context,
-                                      final double lat,
-                                      final double lon,
-                                      final G3MOWMListener listener) {
+                                            final double lat,
+                                            final double lon,
+                                            final G3MOWMListener listener) {
 
       _listener = listener;
 
@@ -218,6 +220,95 @@ public class DataRetriever {
                                                    + "," + (gpsLat - bboxSize) + "," + (gpsLon + bboxSize) + ","
                                                    + (gpsLat + bboxSize) + "," + "10" + "&cluster=yes", false), 2000000000,
                TimeInterval.zero(), false, listenerLocalWeather, false);
+
+   }
+
+
+   public static void getPlacesByName(final String text,
+                                      final G3MContext context,
+                                      final DialogDataListener listener) {
+
+      final Places places = new Places();
+
+      final ArrayList<Place> placesList = new ArrayList<Place>();
+      final IDownloader downloaderGetCities = context.getDownloader();
+
+      final IBufferDownloadListener listenerDownloaderCities = new IBufferDownloadListener() {
+
+         @Override
+         public void onDownload(final URL url,
+                                final IByteBuffer buffer,
+                                final boolean expired) {
+
+            final String response = buffer.getAsString();
+            final IJSONParser parser = new JSONParser_Android();
+            final JSONBaseObject jsonObject = parser.parse(response);
+            final JSONObject object = jsonObject.asObject();
+            final JSONArray results = object.getAsArray("results");
+
+            for (int i = 0; i < results.size(); i++) {
+
+               final Place place = new Place();
+               final JSONObject objectResult = results.getAsObject(i);
+
+
+               place.setFullName(objectResult.getAsString("formatted_address", ""));
+
+               final JSONArray addresComponents = objectResult.getAsArray("address_components");
+               place.setName(addresComponents.getAsObject(0).getAsString("short_name", ""));
+
+
+               final JSONObject geometry = objectResult.getAsObject("geometry");
+
+
+               final JSONObject location = geometry.getAsObject("location");
+
+
+               final Geodetic2D position = new Geodetic2D(Angle.fromDegrees(location.getAsNumber("lat").value()),
+                        Angle.fromDegrees(location.getAsNumber("lng").value()));
+
+               place.setPosition(position);
+               placesList.add(place);
+
+            }
+
+            places.setPlaces(placesList);
+            places.setDownloaded(true);
+
+            listener.onFinishedDownloadPlaces(places);
+
+         }
+
+
+         @Override
+         public void onError(final URL url) {
+            // TODO Auto-generated method stub
+
+         }
+
+
+         @Override
+         public void onCancel(final URL url) {
+            // TODO Auto-generated method stub
+
+         }
+
+
+         @Override
+         public void onCanceledDownload(final URL url,
+                                        final IByteBuffer data,
+                                        final boolean expired) {
+            // TODO Auto-generated method stub
+
+         }
+
+      };
+
+      downloaderGetCities.requestBuffer(
+               new URL("http://maps.googleapis.com/maps/api/geocode/json?address="
+                       + URL.escape(Utils.removeSpecialCharacters(text) + "&sensor=false"), false), 0, TimeInterval.zero(),
+               false, listenerDownloaderCities, false);
+
 
    }
 }
