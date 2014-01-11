@@ -701,9 +701,6 @@ for(var i = 0; i <  forecast.length; i ++){
 	}
 	
 	tmp.push( t  );
-	
-
-
 
 	tm.push( new Date(forecast[i]['dt'] * 1000 + time_zone) );
 	j++;
@@ -722,10 +719,10 @@ chart = new Highcharts.Chart({
 	xAxis: {
 		type: 'datetime',
 		categories: tm,
-		tickInterval: 8,
+		tickInterval: 24,
 		labels: {
 			formatter: function() {
-				return Highcharts.dateFormat('%H:00', this.value);
+				return Highcharts.dateFormat('%d %b', this.value);
 			}
 		}
 	},
@@ -759,17 +756,16 @@ chart = new Highcharts.Chart({
 		type: 'spline'
 	},
 
-        title: { text: 'Temperature next ten days' },
+        title: { text: 'Temperature 10 next dayssss' },
 
 	yAxis: { title: { text: 'Temperature' }	},
 
 	xAxis: {
 		type: 'datetime',
 		categories: tm,
-		tickInterval: 8,
 		labels: {
 			formatter: function() {
-				return Highcharts.dateFormat('%H:00', this.value);
+				return Highcharts.dateFormat('%d %b', this.value);
 			}
 		}
 	},

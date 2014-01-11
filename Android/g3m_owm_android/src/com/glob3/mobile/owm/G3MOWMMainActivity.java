@@ -1,6 +1,6 @@
 
 
-package com.glob3mobile.g3mowm;
+package com.glob3.mobile.owm;
 
 
 import java.io.IOException;
@@ -47,14 +47,14 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.glob3mobile.g3m_owm.R;
-import com.glob3mobile.g3mowm.shared.G3MOWMBuilder;
-import com.glob3mobile.g3mowm.shared.G3MOWMListener;
-import com.glob3mobile.g3mowm.shared.data.DataRetriever;
-import com.glob3mobile.g3mowm.shared.data.Utils;
-import com.glob3mobile.g3mowm.shared.data.Weather;
-import com.glob3mobile.g3mowm.shared.data.WeatherForecast;
-import com.glob3mobile.g3mowm.shared.data.WeatherForecastParser;
+import com.flurry.android.FlurryAgent;
+import com.glob3.mobile.owm.shared.G3MOWMBuilder;
+import com.glob3.mobile.owm.shared.G3MOWMListener;
+import com.glob3.mobile.owm.shared.data.DataRetriever;
+import com.glob3.mobile.owm.shared.data.Utils;
+import com.glob3.mobile.owm.shared.data.Weather;
+import com.glob3.mobile.owm.shared.data.WeatherForecast;
+import com.glob3.mobile.owm.shared.data.WeatherForecastParser;
 
 
 @SuppressLint("SetJavaScriptEnabled")
@@ -83,139 +83,168 @@ public class G3MOWMMainActivity
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_main);
 
-
-      PreferenceManager.setDefaultValues(this, R.xml.settings, true);
-      _sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-      _unitSystem = _sharedPrefs.getString(getResources().getString(R.string.unit_system), "International");
-
-
-      _tabs = (TabHost) findViewById(android.R.id.tabhost);
-
-      final RelativeLayout layout = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
-      final G3MBuilder_Android builder = new G3MBuilder_Android(this);
-      G3MOWMBuilder.buildG3MOWM(builder, this, G3MOWMBuilder.Platform.ANDROID);
-
-      _g3mWidget = builder.createWidget();
-      _g3mContext = _g3mWidget.getG3MContext();
-      layout.addView(_g3mWidget);
-
-      DataRetriever.getWorldWeather(_g3mWidget.getG3MContext(), G3MOWMBuilder.getWeatherMarkerLayer());
-
-      final Spinner spinnerLayers = (Spinner) layout.findViewById(R.id.spinnerBaseLayers);
-      spinnerLayers.setAdapter(new DataSourceAdapter(G3MOWMMainActivity.this, G3MOWMBuilder.getBaseLayerList()));
-      spinnerLayers.bringToFront();
-      spinnerLayers.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-         @Override
-         public void onItemSelected(final AdapterView<?> arg0,
-                                    final View arg1,
-                                    final int arg2,
-                                    final long arg3) {
-
-            G3MOWMBuilder.disableAllBaseLayers();
-            G3MOWMBuilder.enableLayer((String) ((TextView) arg1.findViewById(R.id.layername)).getText());
-         }
-
-
-         @Override
-         public void onNothingSelected(final AdapterView<?> arg0) {
-         }
-      });
-
-
-      final Spinner spinnerWeatherLayers = (Spinner) layout.findViewById(R.id.spinnerWeatherLayers);
-      spinnerWeatherLayers.setAdapter(new DataSourceAdapter(G3MOWMMainActivity.this, G3MOWMBuilder.getWeatherLayerList()));
-      spinnerWeatherLayers.bringToFront();
-      spinnerWeatherLayers.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-         @Override
-         public void onItemSelected(final AdapterView<?> arg0,
-                                    final View arg1,
-                                    final int arg2,
-                                    final long arg3) {
-            G3MOWMBuilder.disableAllWeatherLayers();
-            G3MOWMBuilder.enableLayer((String) ((TextView) arg1.findViewById(R.id.layername)).getText());
-         }
-
-
-         @Override
-         public void onNothingSelected(final AdapterView<?> arg0) {
-         }
-      });
-
+      FlurryAgent.onStartSession(getApplicationContext(), "M6QPGJMK3K4QCK84FMD5");
+      FlurryAgent.logEvent("VERSION 2: BETA: NO ADWORDS");
 
       _gpsTracker = new GPSTracker(G3MOWMMainActivity.this);
-
-
       if (!_gpsTracker.canGetLocation) {
+         FlurryAgent.logEvent("NO GPS");
          Dialogs.showDialogGPSError(_gpsTracker);
       }
       else {
 
          if (!isOnline()) {
             Dialogs.showNetworkError(G3MOWMMainActivity.this);
+            FlurryAgent.logEvent("NETWORK ERROR");
          }
 
+         PreferenceManager.setDefaultValues(this, R.xml.settings, true);
+         _sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+         _unitSystem = _sharedPrefs.getString(getResources().getString(R.string.unit_system), "International");
 
-         DataRetriever.getWeatherForLocation(_g3mWidget.getG3MContext(), _gpsTracker.getLatitude(), _gpsTracker.getLongitude(),
-                  G3MOWMMainActivity.this);
+
+         _tabs = (TabHost) findViewById(android.R.id.tabhost);
+
+         final RelativeLayout layout = (RelativeLayout) findViewById(R.id.g3mWidgetHolder);
+         final G3MBuilder_Android builder = new G3MBuilder_Android(this);
+         G3MOWMBuilder.buildG3MOWM(builder, this, G3MOWMBuilder.Platform.ANDROID);
+
+         _g3mWidget = builder.createWidget();
+         _g3mContext = _g3mWidget.getG3MContext();
+         layout.addView(_g3mWidget);
+
+         DataRetriever.getWorldWeather(_g3mWidget.getG3MContext(), G3MOWMBuilder.getWeatherMarkerLayer());
+
+         final Spinner spinnerLayers = (Spinner) layout.findViewById(R.id.spinnerBaseLayers);
+         spinnerLayers.setAdapter(new DataSourceAdapter(G3MOWMMainActivity.this, G3MOWMBuilder.getBaseLayerList()));
+         spinnerLayers.bringToFront();
+         spinnerLayers.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(final AdapterView<?> arg0,
+                                       final View arg1,
+                                       final int arg2,
+                                       final long arg3) {
+
+               G3MOWMBuilder.disableAllBaseLayers();
+               G3MOWMBuilder.enableLayer((String) ((TextView) arg1.findViewById(R.id.layername)).getText());
+            }
+
+
+            @Override
+            public void onNothingSelected(final AdapterView<?> arg0) {
+            }
+         });
+
+
+         final Spinner spinnerWeatherLayers = (Spinner) layout.findViewById(R.id.spinnerWeatherLayers);
+         spinnerWeatherLayers.setAdapter(new DataSourceAdapter(G3MOWMMainActivity.this, G3MOWMBuilder.getWeatherLayerList()));
+         spinnerWeatherLayers.bringToFront();
+         spinnerWeatherLayers.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(final AdapterView<?> arg0,
+                                       final View arg1,
+                                       final int arg2,
+                                       final long arg3) {
+               G3MOWMBuilder.disableAllWeatherLayers();
+               G3MOWMBuilder.enableLayer((String) ((TextView) arg1.findViewById(R.id.layername)).getText());
+            }
+
+
+            @Override
+            public void onNothingSelected(final AdapterView<?> arg0) {
+            }
+         });
+
+
+         final ToggleButton weatherIcons = (ToggleButton) layout.findViewById(R.id.weatherIcons);
+         weatherIcons.bringToFront();
+         weatherIcons.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(final View arg0) {
+               final MarksRenderer mr = G3MOWMBuilder.getWeatherMarkerLayer();
+               if (mr.isEnable()) {
+                  mr.setEnable(false);
+               }
+               else {
+                  mr.setEnable(true);
+               }
+
+            }
+         });
+
+
+         final SharedPreferences _locationSaved = G3MOWMMainActivity.this.getSharedPreferences("locationsSaved",
+                  Context.MODE_PRIVATE);
+
+         final String defaultLocation = _locationSaved.getString("default", "NONE");
+         if (!defaultLocation.equals("NONE")) {
+            onLocation(defaultLocation);
+         }
+         else {
+            currentLocation();
+         }
+
+         final ImageButton goLocalWeather = (ImageButton) layout.findViewById(R.id.locationButton);
+         goLocalWeather.setBackgroundColor(getResources().getColor(R.color.transparent_background));
+         goLocalWeather.bringToFront();
+
+         goLocalWeather.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(final View v) {
+
+               final SharedPreferences _locationSavedOC = G3MOWMMainActivity.this.getSharedPreferences("locationsSaved",
+                        Context.MODE_PRIVATE);
+               final String defaultLocationOC = _locationSavedOC.getString("default", "NONE");
+               final String latlonCurrentLocation = _locationSavedOC.getString(_location, "0#0");
+               final String latCurrentLocation = latlonCurrentLocation.substring(0, latlonCurrentLocation.indexOf("#"));
+               final String lonCurrentLocation = latlonCurrentLocation.substring(latlonCurrentLocation.indexOf("#") + 1);
+
+
+               if (!defaultLocationOC.equals("NONE")) {
+
+                  DataRetriever.getLocalWeather(_g3mWidget.getG3MContext(), Double.parseDouble(latCurrentLocation),
+                           Double.parseDouble(lonCurrentLocation), G3MOWMBuilder.getWeatherMarkerLayer());
+                  _g3mWidget.setAnimatedCameraPosition(new Geodetic3D(Angle.fromDegrees(Double.parseDouble(latCurrentLocation)),
+                           Angle.fromDegrees(Double.parseDouble(lonCurrentLocation)), 50000));
+               }
+               else {
+
+                  DataRetriever.getLocalWeather(_g3mWidget.getG3MContext(), _gpsTracker.getLatitude(),
+                           _gpsTracker.getLongitude(), G3MOWMBuilder.getWeatherMarkerLayer());
+                  _g3mWidget.setAnimatedCameraPosition(new Geodetic3D(Angle.fromDegrees(_gpsTracker.getLatitude()),
+                           Angle.fromDegrees(_gpsTracker.getLongitude()), 50000));
+               }
+
+
+            }
+         });
+
+
+         _tabs.setup();
+
+
+         TabHost.TabSpec spec = _tabs.newTabSpec(getString(R.string.local_weather));
+         spec.setContent(R.id.tab1);
+         spec.setIndicator(getString(R.string.local_weather));
+         _tabs.addTab(spec);
+
+         spec = _tabs.newTabSpec(getString(R.string.forecast));
+         spec.setContent(R.id.tab2);
+         spec.setIndicator(getString(R.string.forecast));
+         _tabs.addTab(spec);
+
+         spec = _tabs.newTabSpec(getString(R.string.map));
+         spec.setContent(R.id.tab3);
+         spec.setIndicator(getString(R.string.map));
+         _tabs.addTab(spec);
+
+         _tabs.setCurrentTab(0);
+
       }
-
-      final ToggleButton weatherIcons = (ToggleButton) layout.findViewById(R.id.weatherIcons);
-      weatherIcons.bringToFront();
-      weatherIcons.setOnClickListener(new OnClickListener() {
-
-         @Override
-         public void onClick(final View arg0) {
-            final MarksRenderer mr = G3MOWMBuilder.getWeatherMarkerLayer();
-            if (mr.isEnable()) {
-               mr.setEnable(false);
-            }
-            else {
-               mr.setEnable(true);
-            }
-
-         }
-      });
-
-
-      final ImageButton goLocalWeather = (ImageButton) layout.findViewById(R.id.locationButton);
-      goLocalWeather.setBackgroundColor(getResources().getColor(R.color.transparent_background));
-      goLocalWeather.bringToFront();
-
-      goLocalWeather.setOnClickListener(new OnClickListener() {
-
-         @Override
-         public void onClick(final View v) {
-            DataRetriever.getLocalWeather(_g3mWidget.getG3MContext(), _gpsTracker.getLatitude(), _gpsTracker.getLongitude(),
-                     G3MOWMBuilder.getWeatherMarkerLayer());
-            _g3mWidget.setAnimatedCameraPosition(new Geodetic3D(Angle.fromDegrees(_gpsTracker.getLatitude()),
-                     Angle.fromDegrees(_gpsTracker.getLongitude()), 50000));
-         }
-      });
-
-
-      _tabs.setup();
-
-
-      TabHost.TabSpec spec = _tabs.newTabSpec(getString(R.string.local_weather));
-      spec.setContent(R.id.tab1);
-      spec.setIndicator(getString(R.string.local_weather));
-      _tabs.addTab(spec);
-
-      spec = _tabs.newTabSpec(getString(R.string.forecast));
-      spec.setContent(R.id.tab2);
-      spec.setIndicator(getString(R.string.forecast));
-      _tabs.addTab(spec);
-
-      spec = _tabs.newTabSpec(getString(R.string.map));
-      spec.setContent(R.id.tab3);
-      spec.setIndicator(getString(R.string.map));
-      _tabs.addTab(spec);
-
-      _tabs.setCurrentTab(0);
-
-
    }
 
 
@@ -228,7 +257,9 @@ public class G3MOWMMainActivity
 
    @Override
    public void onLocation(final String location) {
+
       _location = location;
+      FlurryAgent.logEvent("LOCATION:" + _location);
       runOnUiThread(new Runnable() {
 
          @Override
@@ -382,6 +413,7 @@ public class G3MOWMMainActivity
 
             final HorizontalScrollView weatherForecastHorizontalScrollView = (HorizontalScrollView) findViewById(R.id.weatherForecastScrollView);
             final LinearLayout forecastViewLayout = (LinearLayout) weatherForecastHorizontalScrollView.findViewById(R.id.weatherForecastScrollViewLayout);
+            forecastViewLayout.removeAllViews();
 
             final WebView forecastWeatherWebView = (WebView) findViewById(R.id.forecastWeatherWidgets);
             final WebSettings webSettingsForecast = forecastWeatherWebView.getSettings();
@@ -460,4 +492,14 @@ public class G3MOWMMainActivity
 
 
    }
+
+
+   @Override
+   public void currentLocation() {
+
+      DataRetriever.getWeatherForLocation(_g3mWidget.getG3MContext(), _gpsTracker.getLatitude(), _gpsTracker.getLongitude(),
+               G3MOWMMainActivity.this);
+   }
+
+
 }

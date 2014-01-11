@@ -3,7 +3,7 @@
  */
 
 
-package com.glob3mobile.g3mowm;
+package com.glob3.mobile.owm;
 
 import java.util.ArrayList;
 
@@ -16,8 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
-import com.glob3mobile.g3m_owm.R;
 
 
 /**

@@ -1,50 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
- 
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/uidialog"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:visibility="visible" >
 
-    <EditText
-        android:id="@+id/locationToSearch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:inputType="textNoSuggestions"
-        android:ems="10" >
-        <requestFocus />
-    </EditText>
-
-    <Button
-        android:id="@+id/go"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/go" />
-
-         <Spinner
-                android:id="@+id/spinnerLocationDialog"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:visibility="invisible"
-            />
-         
-            
-      <RelativeLayout
-           android:id="@+id/loading"
-         android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:visibility="invisible">
-         <TextView
+        <TextView
             android:id="@+id/loadingtext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Searching locations...."
-            android:textAppearance="?android:attr/textAppearanceLarge" 
+            android:text="Searching..."
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/blue_lh" 
             android:visibility="invisible"
             />
+
+        <EditText
+            android:id="@+id/locationToSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:ems="10"
+            android:inputType="textNoSuggestions" 
+             android:visibility="visible"
+            >
+
+            <requestFocus />
+        </EditText>
+
+        <Button
+            android:id="@+id/go"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/locationToSearch"
+            android:text="@string/go" 
+             android:background="@drawable/location_button"
+             android:padding="5dp"
+              android:layout_margin="10dp"
+             android:visibility="visible"
+            />
+
+        <ListView
+            android:id="@+id/spinnerLocationDialog"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:visibility="invisible" />
         
+       <Button
+            android:id="@+id/cancelLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/spinnerLocationDialog"
+            android:text="@string/cancel" 
+             android:background="@drawable/location_button"
+             android:padding="5dp"
+             android:layout_margin="10dp"
+             android:visibility="invisible"
+            />
     </RelativeLayout>
-    
-</LinearLayout>

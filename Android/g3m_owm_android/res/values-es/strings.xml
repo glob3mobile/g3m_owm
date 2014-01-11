@@ -7,6 +7,7 @@
     <string name="local_weather">Clima local</string>
     <string name="map">Mapa</string>
      <string name="forecast">Previsión</string>
+       <string name="location_validation">Por favor introduzca el lugar que quiere buscar</string>
      <string name="enableIcons">Ver iconos</string>
      <string name="disableIcons">Quitar Iconos</string>
      <string name="refreshItem">Refresh</string>
@@ -18,6 +19,10 @@
      <string name="search_location">Buscar lugar &#8230;</string>
      <string name="go">ok</string>
      <string name="cancel">Cancelar</string>   
+    <string name="myLocations">Mis lugares</string>
+   <string name="newLocation">Add nueva localización</string>
+    <string name="loading">Loading</string>
+     <string name="currentGPSLocation">Localización actual GPS</string>
      <string-array name="unit_system_array">
         <item >Internacional</item>
         <item>Imperial</item>

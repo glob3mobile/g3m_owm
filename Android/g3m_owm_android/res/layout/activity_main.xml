@@ -8,18 +8,16 @@
          android:layout_width="fill_parent"
     android:layout_height="fill_parent"
          >
-
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Loading weather data...."
-            android:textAppearance="?android:attr/textAppearanceLarge" 
-            android:visibility="visible"
-            />
         
     </RelativeLayout>
-    
+
+    <ProgressBar
+        android:id="@+id/progressBar1"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
     
                   <TabHost
             android:id="@android:id/tabhost"
@@ -64,8 +62,6 @@
                             android:layout_marginLeft="34dp"
                             android:layout_marginTop="30dp"
                             android:textSize="35sp"
-                        
-                            android:background="@drawable/location_button"
                                  />
 
               
@@ -140,8 +136,9 @@
                                       android:layout_marginLeft="15dp"
                                       android:layout_below="@+id/localWeatherWidgets"
                                       android:layout_alignParentLeft="true"
+                                      android:padding="5dp"
                                       android:background="@drawable/location_button"
-                                      android:text="My locations" />
+                                      android:text="@string/myLocations" />
                                 
                                         <Button
                                       android:id="@+id/addNewLocation"
@@ -150,10 +147,10 @@
                                       android:layout_alignParentRight="true"
                                         android:layout_marginTop="10dp"
                                       android:layout_marginRight="15dp"
+                                      android:padding="5dp"
                                       android:background="@drawable/location_button"
                                       android:layout_below="@+id/localWeatherWidgets"
-                                      android:text="Add New Location" />
-                        
+                                      android:text="@string/newLocation" />
                         
                         </RelativeLayout>
                         

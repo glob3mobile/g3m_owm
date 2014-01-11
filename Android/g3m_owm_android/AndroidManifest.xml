@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.glob3mobile.g3m_owm"
-    android:versionCode="1"
-    android:versionName="1.0" >
+    package="com.glob3.mobile.owm"
+    android:versionCode="3"
+    android:versionName="3.0" >
 
     <uses-sdk
         android:minSdkVersion="16"
@@ -19,13 +19,14 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/ic_launcher_"
         android:label="@string/app_name"
         android:largeHeap="true"
+        
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.glob3mobile.g3mowm.G3MOWMMainActivity"
-            android:label="@string/app_name" >
+            android:name="com.glob3.mobile.owm.G3MOWMMainActivity"
+            android:label="@string/app_name" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -33,12 +34,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.glob3mobile.g3mowm.SettingsActivity"
-            android:label="Settings" >
+            android:name="com.glob3.mobile.owm.SettingsActivity"
+            android:label="Settings" android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name="com.glob3mobile.g3mowm.SearchLocationActivity"
-            android:label="@string/title_activity_search_location" >
+            android:name="com.glob3.mobile.owm.SearchLocationActivity"
+            android:label="@string/title_activity_search_location" android:screenOrientation="portrait">
         </activity>
     </application>
 

@@ -1,6 +1,6 @@
 
 
-package com.glob3mobile.g3mowm;
+package com.glob3.mobile.owm;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -9,8 +9,6 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-
-import com.glob3mobile.g3m_owm.R;
 
 
 public class SettingsActivity

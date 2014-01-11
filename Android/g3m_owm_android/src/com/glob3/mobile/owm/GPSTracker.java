@@ -1,6 +1,6 @@
 
 
-package com.glob3mobile.g3mowm;
+package com.glob3.mobile.owm;
 
 import org.glob3.mobile.generated.ILogger;
 
