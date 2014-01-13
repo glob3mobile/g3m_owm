@@ -84,10 +84,14 @@ public class G3MOWMBuilder {
       _weatherLayers.add("None");
       _weatherLayers.add("Clouds");
       _weatherLayers.add("Precipitation");
+      // _weatherLayers.add("Precipitation 3h global yr.no");
       _weatherLayers.add("Pressure");
       _weatherLayers.add("Pressure Contour");
+      _weatherLayers.add("Surface pressure Contour yr.no");
       _weatherLayers.add("Wind");
+      _weatherLayers.add("Wind 10m global yr.no");
       _weatherLayers.add("Temperature");
+      _weatherLayers.add("Temperature 2m global yr.no");
       _weatherLayers.add("Snow");
       return _weatherLayers;
    }

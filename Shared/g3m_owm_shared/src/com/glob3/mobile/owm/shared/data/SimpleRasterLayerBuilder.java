@@ -8,6 +8,7 @@ import org.glob3.mobile.generated.BingMapType;
 import org.glob3.mobile.generated.BingMapsLayer;
 import org.glob3.mobile.generated.LayerBuilder;
 import org.glob3.mobile.generated.LayerSet;
+import org.glob3.mobile.generated.LayerTilesRenderParameters;
 import org.glob3.mobile.generated.LevelTileCondition;
 import org.glob3.mobile.generated.MapBoxLayer;
 import org.glob3.mobile.generated.MapQuestLayer;
@@ -158,6 +159,39 @@ public class SimpleRasterLayerBuilder
       snowOWM.setTitle("Snow");
       snowOWM.setEnable(false);
       layerSet.addLayer(snowOWM);
+
+
+      final WMSLayer norwTempLayer = new WMSLayer("temperature_2m_global", new URL(
+               "http://public-wms.met.no/verportal/verportal.map?", false), WMSServerVersion.WMS_1_1_0, Sector.fullSphere(),
+               "image/png", "EPSG:900913", "", false, new LevelTileCondition(2, 18), TimeInterval.fromDays(30), true,
+               LayerTilesRenderParameters.createDefaultMercator(2, 18), 0.5f);
+      norwTempLayer.setTitle("Temperature 2m global yr.no");
+      norwTempLayer.setEnable(false);
+      layerSet.addLayer(norwTempLayer);
+
+      final WMSLayer norwWindLayer = new WMSLayer("wind_10m_global", new URL("http://public-wms.met.no/verportal/verportal.map?",
+               false), WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/png", "EPSG:900913", "", false,
+               new LevelTileCondition(2, 18), TimeInterval.fromDays(30), true, LayerTilesRenderParameters.createDefaultMercator(
+                        2, 18), 0.5f);
+      norwWindLayer.setTitle("Wind 10m global yr.no");
+      norwWindLayer.setEnable(false);
+      layerSet.addLayer(norwWindLayer);
+
+      final WMSLayer norwPrecipitationLayer = new WMSLayer("precipitation_3h_global", new URL(
+               "http://public-wms.met.no/verportal/verportal.map?", false), WMSServerVersion.WMS_1_1_0, Sector.fullSphere(),
+               "image/png", "EPSG:900913", "", false, new LevelTileCondition(2, 18), TimeInterval.fromDays(30), true,
+               LayerTilesRenderParameters.createDefaultMercator(2, 18), 0.5f);
+      norwPrecipitationLayer.setTitle("Precipitation 3h global yr.no");
+      norwPrecipitationLayer.setEnable(false);
+      //layerSet.addLayer(norwPrecipitationLayer);
+
+      final WMSLayer norwSurfacePressureLayer = new WMSLayer("surface_pressure_global", new URL(
+               "http://public-wms.met.no/verportal/verportal.map?", false), WMSServerVersion.WMS_1_1_0, Sector.fullSphere(),
+               "image/png", "EPSG:900913", "", true, new LevelTileCondition(2, 18), TimeInterval.fromDays(30), true,
+               LayerTilesRenderParameters.createDefaultMercator(2, 18));
+      norwSurfacePressureLayer.setTitle("Surface pressure Contour yr.no");
+      norwSurfacePressureLayer.setEnable(false);
+      layerSet.addLayer(norwSurfacePressureLayer);
 
 
       return layerSet;
