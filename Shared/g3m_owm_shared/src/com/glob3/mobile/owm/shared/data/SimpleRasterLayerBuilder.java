@@ -163,14 +163,14 @@ public class SimpleRasterLayerBuilder
 
       final WMSLayer norwTempLayer = new WMSLayer("temperature_2m_global", new URL(
                "http://public-wms.met.no/verportal/verportal.map?", false), WMSServerVersion.WMS_1_1_0, Sector.fullSphere(),
-               "image/png", "EPSG:900913", "", false, new LevelTileCondition(2, 18), TimeInterval.fromDays(30), true,
+               "image/png", "EPSG:900913", "", true, new LevelTileCondition(2, 18), TimeInterval.fromDays(30), true,
                LayerTilesRenderParameters.createDefaultMercator(2, 18), 0.5f);
       norwTempLayer.setTitle("Temperature 2m global yr.no");
       norwTempLayer.setEnable(false);
       layerSet.addLayer(norwTempLayer);
 
       final WMSLayer norwWindLayer = new WMSLayer("wind_10m_global", new URL("http://public-wms.met.no/verportal/verportal.map?",
-               false), WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/png", "EPSG:900913", "", false,
+               false), WMSServerVersion.WMS_1_1_0, Sector.fullSphere(), "image/png", "EPSG:900913", "", true,
                new LevelTileCondition(2, 18), TimeInterval.fromDays(30), true, LayerTilesRenderParameters.createDefaultMercator(
                         2, 18), 0.5f);
       norwWindLayer.setTitle("Wind 10m global yr.no");
@@ -179,8 +179,8 @@ public class SimpleRasterLayerBuilder
 
       final WMSLayer norwPrecipitationLayer = new WMSLayer("precipitation_3h_global", new URL(
                "http://public-wms.met.no/verportal/verportal.map?", false), WMSServerVersion.WMS_1_1_0, Sector.fullSphere(),
-               "image/png", "EPSG:900913", "", false, new LevelTileCondition(2, 18), TimeInterval.fromDays(30), true,
-               LayerTilesRenderParameters.createDefaultMercator(2, 18), 0.5f);
+               "image/png", "EPSG:900913", "", true, new LevelTileCondition(2, 18), TimeInterval.fromDays(30), true,
+               LayerTilesRenderParameters.createDefaultMercator(2, 18), 0.8f);
       norwPrecipitationLayer.setTitle("Precipitation 3h global yr.no");
       norwPrecipitationLayer.setEnable(false);
       //layerSet.addLayer(norwPrecipitationLayer);
