@@ -44,6 +44,7 @@ public class Dialogs {
                   public void onClick(final DialogInterface dialog,
                                       final int id) {
                      dialog.cancel();
+                     System.exit(0);
                   }
                });
       final AlertDialog alert = builder.create();

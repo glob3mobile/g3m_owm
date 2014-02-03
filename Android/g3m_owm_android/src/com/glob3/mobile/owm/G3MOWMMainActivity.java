@@ -89,7 +89,7 @@ public class G3MOWMMainActivity
       _gpsTracker = new GPSTracker(G3MOWMMainActivity.this);
       if (!_gpsTracker.canGetLocation) {
          FlurryAgent.logEvent("NO GPS");
-         Dialogs.showDialogGPSError(_gpsTracker);
+         Dialogs.showDialogGPSError(G3MOWMMainActivity.this);
       }
       else {
 

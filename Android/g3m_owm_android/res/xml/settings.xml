@@ -11,4 +11,13 @@
             android:entryValues="@array/unit_system_array"
             android:defaultValue="@string/international"
             android:title="@string/unit_system" />
+       
+       
+<!--               <ListPreference -->
+<!--             android:key="@string/unit_system" -->
+<!--             android:entries="@array/unit_system_array"            -->
+<!--             android:entryValues="@array/unit_system_array" -->
+<!--             android:defaultValue="@string/international" -->
+<!--             android:title="@string/unit_system" /> -->
+       
 </PreferenceScreen>

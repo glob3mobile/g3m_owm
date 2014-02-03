@@ -3,7 +3,7 @@
 
     <string name="app_name">G3M Weather</string>
     <string name="action_settings">Settings</string>
-    <string name="gps_disabled_message">Your GPS is disabled. Local time will not be avalaible</string>
+    <string name="gps_disabled_message">Your GPS is disabled. Switch on the location and re-start G3M</string>
      <string name="location_validation">Please introduce a location to search</string>
     <string name="local_weather">Local Weather</string>
     <string name="map">Map</string>
